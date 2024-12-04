@@ -43,3 +43,5 @@ class Employee {
         return this.isValidObject;
     }
 }
+
+export default Employee;

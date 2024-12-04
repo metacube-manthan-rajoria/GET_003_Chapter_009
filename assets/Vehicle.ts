@@ -56,3 +56,5 @@ enum VehicleType {
     THREE_WHEELER,
     FOUR_WHEELER
 }
+
+export {Vehicle, VehicleType};
