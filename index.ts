@@ -1,3 +1,6 @@
+import Employee from "./assets/Employee.js"
+import {Vehicle, VehicleType} from "./assets/Vehicle.js"
+
 // Regular Expressions
 const hasNumber: RegExp = /\d/;
 const checkEmail: RegExp = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim;
@@ -16,8 +19,8 @@ let currentEmployeeFormStep: number = 0;
 let currentVehicleFormStep: number = 0;
 
 // Variables
-let employee;
-let vehicle;
+let employee: Employee;
+let vehicle: Vehicle;
 let currentEmployeeGender = "other";
 
 // Application Functions
@@ -103,83 +106,73 @@ function nextEmployeeSection(){
 }
 
 function nextVehicleSection(){
-    let elements = document.getElementsByClassName("vehicle_form_item");
-    let formMessage = document.getElementById("vehicle_form_message");
+    let elements: HTMLCollectionOf<Element> = document.getElementsByClassName("vehicle_form_item");
 
-    if(vehicleDetails.itemIndex < elements.length){
-        if(vehicleDetails.itemIndex == 0){
-            let textBox = document.getElementById("vehicle-company");
-            let textBoxValue = textBox.value;
+    if(currentVehicleFormStep < elements.length){
+        if(currentVehicleFormStep == 0){
+            let textBoxValue: string = getInputValueById("vehicle-company");
 
             if(textBoxValue.length < 2){
-                formMessage.style.display = "block";
-                formMessage.innerText = "Enter valid company name";
+                setElementMessageById(vehicleFormErrorId, "Enter valid company name");
                 return;
-            } 
-            vehicleDetails.vehicleCompany = textBoxValue;
-        }else if(vehicleDetails.itemIndex == 1){
-            let textBox = document.getElementById("vehicle-model");
-            let textBoxValue = textBox.value;
+            }
+        }else if(currentVehicleFormStep == 1){
+            let textBoxValue: string = getInputValueById("vehicle-model");
 
             if(textBoxValue.length < 2){
-                formMessage.style.display = "block";
-                formMessage.innerText = "Enter valid model name";
+                setElementMessageById(vehicleFormErrorId, "Enter valid model name");
                 return;
-            } 
-            vehicleDetails.vehicleModel = textBoxValue;
-        }else if(vehicleDetails.itemIndex == 2){
-            let selectBox = document.getElementById("vehicle-type");
-            let textBoxValue = selectBox.value;
+            }
+        }else if(currentVehicleFormStep == 2){
+            let textBoxValue: string = getInputValueById("vehicle-type");
 
             if(textBoxValue === "none"){
-                formMessage.style.display = "block";
-                formMessage.innerText = "Enter valid vehicle type";
+                setElementMessageById(vehicleFormErrorId, "Enter valid vehicle type");
                 return;
-            } 
-            vehicleDetails.vehicleType = textBoxValue;
-        }else if(vehicleDetails.itemIndex == 3){
-            let textBox = document.getElementById("vehicle-number");
-            let textBoxValue = textBox.value;
+            }
+        }else if(currentVehicleFormStep == 3){
+            let textBoxValue: string = getInputValueById("vehicle-number");
 
             if(textBoxValue.length < 6){
-                formMessage.style.display = "block";
-                formMessage.innerText = "Enter valid vehicle number";
+                setElementMessageById(vehicleFormErrorId, "Enter valid vehicle number");
                 return;
-            } 
-            vehicleDetails.vehicleNumber = textBoxValue;
-        }else if(vehicleDetails.itemIndex == 4){
-            let textBox = document.getElementById("vehicle-employee-id");
-            let textBoxValue = textBox.value;
+            }
+        }else if(currentVehicleFormStep == 4){
+            let textBoxValue: string = getInputValueById("vehicle-employee-id");
 
             if(textBoxValue.length < 4){
-                formMessage.style.display = "block";
-                formMessage.innerText = "Enter valid id";
+                setElementMessageById(vehicleFormErrorId, "Enter valid id");
                 return;
-            } 
-            vehicleDetails.employeeId = textBoxValue;
+            }
 
-            let button = document.getElementById("vehicle_form_button");
-            button.innerText = "Add Vehicle";
+            setElementMessageById("vehicle_form_button", "Add Vehicle");
         }else{
-            let textArea = document.getElementById("vehicle-identification");
-            let textAreaValue = textArea.value;
-            vehicleDetails.vehicleDescription = textAreaValue;
+            let vehicleCompany: string = getInputValueById("vehicle-company");
+            let vehicleModel: string = getInputValueById("vehicle-model");
 
-            let vehicleSection = document.getElementById("vehicle_section");
-            vehicleSection.style.display = "none";
+            let vehicleType: VehicleType = VehicleType.TWO_WHEELER;
+            let selectedVehicleType = getInputValueById("vehicle-type");
+            if(selectedVehicleType === "three-wheeler") vehicleType = VehicleType.THREE_WHEELER;
+            if(selectedVehicleType === "four-wheeler") vehicleType = VehicleType.FOUR_WHEELER;
             
-            showPricingSection()
+            let vehicleRegistrationNumber: string = getInputValueById("vehicle-number");
+            let employeeId: string = getInputValueById("vehicle-employee-id");
+            let vehicleDescription: string = getInputValueById("vehicle-identification");
 
+            vehicle = new Vehicle(vehicleCompany, vehicleModel, vehicleType, vehicleRegistrationNumber, employeeId, vehicleDescription);
+
+            (document.getElementById("vehicle_section") as HTMLElement).style.display = "none";
+            showPricingSection()
             return;
         }
         
-        vehicleDetails.itemIndex++;
-        hideElementsByClass(elements);
-        elements[vehicleDetails.itemIndex].style.display = "block";
-        formMessage.innerText = "";
-        formMessage.style.display = "none";
+        currentVehicleFormStep++;
+        hideElementsByClass("vehicle_form_item");
+        (elements[currentVehicleFormStep] as HTMLElement).style.display = "block";
+        (document.getElementById(vehicleFormErrorId) as HTMLElement).innerText = "";
+        (document.getElementById(vehicleFormErrorId) as HTMLElement).style.display = "none";
     }else{
-        elements[elements.length - 1].style.display = "block";
+        (elements[elements.length - 1] as HTMLElement).style.display = "block";
     }
 }
 
