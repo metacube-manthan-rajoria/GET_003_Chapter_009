@@ -11,7 +11,9 @@ let employeeSection: HTMLElement | null = document.getElementById("employee_sect
 let vehicleSection: HTMLElement | null = document.getElementById("vehicle_section");
 
 // HTML Element Id's
+let employeeFormItemId: string = "employee_form_item";
 let employeeFormErrorId: string = "employee_form_message";
+let vehicleFormItemId: string = "vehicle_form_item";
 let vehicleFormErrorId: string = "vehicle_form_message";
 
 // Employee and Vehicle Form Step Index
@@ -151,7 +153,7 @@ function nextVehicleSection(){
             let vehicleModel: string = getInputValueById("vehicle-model");
 
             let vehicleType: VehicleType = VehicleType.TWO_WHEELER;
-            let selectedVehicleType = getInputValueById("vehicle-type");
+            let selectedVehicleType: string = getInputValueById("vehicle-type");
             if(selectedVehicleType === "three-wheeler") vehicleType = VehicleType.THREE_WHEELER;
             if(selectedVehicleType === "four-wheeler") vehicleType = VehicleType.FOUR_WHEELER;
             
@@ -254,26 +256,21 @@ function showTicketSection(){
  */
 function initialize(){
     // Hiding Sections Initially
-    let vehicleSection = document.getElementById("vehicle_section");
-    vehicleSection.style.display = "none";
-    let pricingSection = document.getElementById("pricing_section");
-    pricingSection.style.display = "none";
-    let ticketSection = document.getElementById("ticket_section");
-    ticketSection.style.display = "none";
+    hideElementById("vehicle_section");
+    hideElementById("pricing_section");
+    hideElementById("ticket_section");
 
-    // Hiding all form elements except first 
-    let elements1 = document.getElementsByClassName("employee_form_item");
-    let elements2 = document.getElementsByClassName("vehicle_form_item");
-    hideElementsByClass(elements1);
-    hideElementsByClass(elements2);
-    elements1[0].style.display = "block";
-    elements2[0].style.display = "block";
+    // Hiding all form elements except first
+    hideElementsByClass(employeeFormItemId);
+    hideElementsByClass(vehicleFormItemId);
+    (document.getElementsByClassName(employeeFormItemId)[0] as HTMLElement).style.display = "block";
+    (document.getElementsByClassName(vehicleFormItemId)[0] as HTMLElement).style.display = "block";
 
     // Adding eventListner to radiobutton
-    let radios = document.getElementsByClassName("employee-gender-radio");
-    for(const radio of radios){
-        radio.addEventListener("change", (e)=>{
-            employeeDetails.employeeGender = e.target.value;
+    let radioButtons: HTMLCollectionOf<Element> = document.getElementsByClassName("employee-gender-radio");
+    for(const radio of radioButtons){
+        radio.addEventListener("change", (e: Event)=>{
+            currentEmployeeGender = (e.target as HTMLInputElement).value;
         });
     }
 
@@ -333,16 +330,25 @@ function showElementById(id: string){
     let element: HTMLElement | null = document.getElementById(id);
     if(element == null){
         console.log("Element with id: " + id + " does not exists.")
-        return "-1";
+        return;
     }
     element.style.display = "block";
+}
+
+function hideElementById(id: string){
+    let element: HTMLElement | null = document.getElementById(id);
+    if(element == null){
+        console.log("Element with id: " + id + " does not exists.")
+        return;
+    }
+    element.style.display = "none";
 }
 
 function setElementMessageById(id: string, message: string){
     let errorMessageSpan: HTMLElement | null = document.getElementById(id);
     if(errorMessageSpan == null){
         console.log("Element with id: " + id + " does not exists.")
-        return "-1";
+        return;
     }
     errorMessageSpan.style.display = "block";
     errorMessageSpan.innerText = message;
