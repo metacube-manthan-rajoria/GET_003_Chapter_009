@@ -1,17 +1,12 @@
-const hasNumber = /\d/;
-const checkEmail = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim;
+const hasNumber: RegExp = /\d/;
+const checkEmail: RegExp = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim;
+const checkPassword: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,15}$/;
 
-const pricing = {
-    "two-wheeler": [5, 100, 500],
-    "three-wheeler": [10, 200, 1000],
-    "four-wheeler": [20, 500, 3500]
-};
-const pricingDivision = [" / Day", " / Month", " / Year"];
-let currentCurrencyFormat = "$";
+let employeeFormErrorId: string = "employee_form_message";
+let vehicleFormErrorId: string = "vehicle_form_message";
 
-let currentPlan = "day";
-
-let employeeDetails = {
+// Employee and Vehicle Details
+let employeeDetails: any = {
     itemIndex:0,
     employeeName: "",
     employeeGender: "",
@@ -20,7 +15,7 @@ let employeeDetails = {
     employeeNumber: ""
 };
 
-let vehicleDetails = {
+let vehicleDetails: any = {
     itemIndex: 0,
     vehicleCompany: "",
     vehicleModel: "",
@@ -30,80 +25,95 @@ let vehicleDetails = {
     vehicleDescription: ""
 };
 
-function hideSection(elements){
+// Pricing Variables
+const vehiclePricing: any = {
+    "two-wheeler": [5, 100, 500],
+    "three-wheeler": [10, 200, 1000],
+    "four-wheeler": [20, 500, 3500]
+};
+const pricingStringFormats: string[] = [" / Day", " / Month", " / Year"];
+let currentCurrency: string = "$";
+let currentPlan: string = "day";
+
+// Utility Functions
+function hideElementsByClass(className: string){
+    let elements: HTMLCollectionOf<Element> = document.getElementsByClassName(className);
     for(const element of elements){
-        element.style.display = "none";
+        (element as HTMLElement).style.display = "none";
     }
 }
 
+function showElementById(id: string){
+    let element: HTMLElement | null = document.getElementById(id);
+    if(element == null){
+        console.log("Element with id: " + id + " does not exists.")
+        return "-1";
+    }
+    element.style.display = "block";
+}
+
+function setElementMessageById(id: string, message: string){
+    let errorMessageSpan: HTMLElement | null = document.getElementById(id);
+    if(errorMessageSpan == null){
+        console.log("Element with id: " + id + " does not exists.")
+        return "-1";
+    }
+    errorMessageSpan.style.display = "block";
+    errorMessageSpan.innerText = message;
+}
+
+function getInputValueById(id: string): string {
+    let element: HTMLElement | null = <HTMLInputElement>document.getElementById(id);
+    if(element == null){
+        console.log("Element with id: " + id + " does not exists.")
+        return "-1";
+    }
+    return (element as HTMLInputElement).value
+}
+
+// Application Functions
 function nextEmployeeSection(){
-    let elements = document.getElementsByClassName("employee_form_item");
-    let formMessage = document.getElementById("employee_form_message");
-    
+    let elements: HTMLCollectionOf<Element> = document.getElementsByClassName("employee_form_item");
+
     if(employeeDetails.itemIndex < elements.length){
         if(employeeDetails.itemIndex == 0){
-            let textBox = document.getElementById("employee-name");
-            let textBoxValue = textBox.value;
-
+            let textBoxValue: string | number = getInputValueById("employee-name");
+            
             if(textBoxValue.length < 2 || hasNumber.test(textBoxValue)){
-                formMessage.style.display = "block";
-                formMessage.innerText = "Enter valid name";
+                setElementMessageById(employeeFormErrorId, "Enter valid name")
                 return;
-            } 
+            }
+
             employeeDetails.employeeName = textBoxValue;
-            let label = document.getElementById("employee_form_gender_label");
-            label.innerText = "Hi " + employeeDetails.employeeName + ", Can I know your gender.";
+            setElementMessageById(
+                "employee_form_gender_label", 
+                "Hi " + employeeDetails.employeeName + ", Can I know your gender."
+            );
         }else if(employeeDetails.itemIndex == 1){
-            let radio1 = document.getElementById("employee-gender-male");
-            let radio2 = document.getElementById("employee-gender-female");
-            let radio3 = document.getElementById("employee-gender-other");
+            let radio1 = <HTMLInputElement>document.getElementById("employee-gender-male");
+            let radio2 = <HTMLInputElement>document.getElementById("employee-gender-female");
+            let radio3 = <HTMLInputElement>document.getElementById("employee-gender-other");
 
             if(!radio1.checked && !radio2.checked && !radio3.checked){
-                formMessage.style.display = "block";
-                formMessage.innerText = "Select one of the options";
+                setElementMessageById(employeeFormErrorId, "Select one of the options");
                 return;
             };
-            let label = document.getElementById("employee_form_email_label");
-            label.innerText = "Hi " + employeeDetails.employeeName + ", Can I know your Email.";
+            setElementMessageById(
+                "employee_form_email_label", 
+                "Hi " + employeeDetails.employeeName + ", Can I know your Email."
+            );
         }else if(employeeDetails.itemIndex == 2){
-            let textBox = document.getElementById("employee-email");
-            let textBoxValue = textBox.value;
+            let textBoxValue = getInputValueById("employee-email");
             let isEmailValid = checkEmail.test(textBoxValue);
 
-            if(!textBox.validity.valid || !isEmailValid){
-                formMessage.style.display = "block";
-                formMessage.innerText = "Enter valid email";
+            if(!isEmailValid){
+                setElementMessageById(employeeFormErrorId, "Enter valid email");
                 return;
             };
             employeeDetails.employeeEmail = textBoxValue;
-
-            document.getElementById("employee-password").addEventListener("blur", (e)=>{
-                if(e.target.value.length < 8){
-                    e.target.style.border = "2px solid red";
-                }else if(e.target.value.length < 10){
-                    e.target.style.border = "2px solid orange";
-                }else if(e.target.value.length < 12){
-                    e.target.style.border = "2px solid yellow";
-                }else{
-                    e.target.style.border = "2px solid green";
-                }
-            });
-            document.getElementById("employee-password-confirmation").addEventListener("focusout", (e)=>{
-                if(e.target.value.length < 8){
-                    e.target.style.border = "2px solid red";
-                }else if(e.target.value.length < 10){
-                    e.target.style.border = "2px solid orange";
-                }else if(e.target.value.length < 12){
-                    e.target.style.border = "2px solid yellow";
-                }else{
-                    e.target.style.border = "2px solid green";
-                }
-            });
         }else if(employeeDetails.itemIndex == 3){
-            let textBox1 = document.getElementById("employee-password");
-            let textBox2 = document.getElementById("employee-password-confirmation");
-            let textBoxValue1 = textBox1.value;
-            let textBoxValue2 = textBox2.value;
+            let textBoxValue1 = getInputValueById("employee-password");
+            let textBoxValue2 = getInputValueById("employee-password-confirmation");
             
             let hasUpperLetter = false;
             let hasLowerLetter = false;
@@ -158,7 +168,7 @@ function nextEmployeeSection(){
         }
 
         employeeDetails.itemIndex++;
-        hideSection(elements);
+        hideElementsByClass(elements);
         elements[employeeDetails.itemIndex].style.display = "block";
         formMessage.innerText = "";
         formMessage.style.display = "none";
@@ -239,7 +249,7 @@ function nextVehicleSection(){
         }
         
         vehicleDetails.itemIndex++;
-        hideSection(elements);
+        hideElementsByClass(elements);
         elements[vehicleDetails.itemIndex].style.display = "block";
         formMessage.innerText = "";
         formMessage.style.display = "none";
@@ -254,9 +264,9 @@ function showPricingSection(){
     pricingSection.style.display = "block";
 
     let currencyConvertionRatio = 1;
-    if(currentCurrencyFormat === "$"){
+    if(currentCurrency === "$"){
         currencyConvertionRatio = 85;
-    }else if(currentCurrencyFormat === "¥"){
+    }else if(currentCurrency === "¥"){
         currencyConvertionRatio = 1/1.77;
     }else{
         currencyConvertionRatio = 1;
@@ -265,9 +275,9 @@ function showPricingSection(){
     let i = 0;
     for(const option of pricingOptions){
         option.innerText = 
-            currentCurrencyFormat + 
-            (pricing[vehicleDetails.vehicleType][i] / currencyConvertionRatio).toFixed(2) + 
-            pricingDivision[i];
+            currentCurrency + 
+            (vehiclePricing[vehicleDetails.vehicleType][i] / currencyConvertionRatio).toFixed(2) + 
+            pricingStringFormats[i];
         i++;
     }
 }
@@ -307,17 +317,17 @@ function showTicketSection(){
     }
 
     let currencyConvertionRatio = 1;
-    if(currentCurrencyFormat === "$"){
+    if(currentCurrency === "$"){
         currencyConvertionRatio = 85;
-    }else if(currentCurrencyFormat === "¥"){
+    }else if(currentCurrency === "¥"){
         currencyConvertionRatio = 1/1.77;
     }else{
         currencyConvertionRatio = 1;
     }
 
     pricingPlanDetailValue.innerText = 
-        currentCurrencyFormat + 
-        (pricing[vehicleDetails.vehicleType][priceIndex] / currencyConvertionRatio).toFixed(2) + 
+        currentCurrency + 
+        (vehiclePricing[vehicleDetails.vehicleType][priceIndex] / currencyConvertionRatio).toFixed(2) + 
         " per " + currentPlan;
 }
 
@@ -336,8 +346,8 @@ function initialize(){
     // Hiding all form elements except first 
     let elements1 = document.getElementsByClassName("employee_form_item");
     let elements2 = document.getElementsByClassName("vehicle_form_item");
-    hideSection(elements1);
-    hideSection(elements2);
+    hideElementsByClass(elements1);
+    hideElementsByClass(elements2);
     elements1[0].style.display = "block";
     elements2[0].style.display = "block";
 
@@ -349,17 +359,35 @@ function initialize(){
         });
     }
 
+    const passwordFieldBorderCases: Function = (e: Event)=>{
+        let element = <HTMLInputElement>e.target;
+        if(element == null){
+            return;
+        }
+        if(element.value.length < 8){
+            element.style.border = "2px solid red";
+        }else if(element.value.length < 10){
+            element.style.border = "2px solid orange";
+        }else if(element.value.length < 12){
+            element.style.border = "2px solid yellow";
+        }else{
+            element.style.border = "2px solid green";
+        }
+    }
+    document.getElementById("employee-password")?.addEventListener("blur", passwordFieldBorderCases());
+    document.getElementById("employee-password-confirmation")?.addEventListener("blur", passwordFieldBorderCases());
+
     // Adding eventListner to Pricing Currency Selector Menu
     let pricingCurrency = document.getElementById("pricing-currency");
     pricingCurrency.addEventListener("change", (e)=>{
         let currency = e.target.value;
 
         if(currency === "yen"){
-            currentCurrencyFormat = "¥";
+            currentCurrency = "¥";
         }else if(currency === "rupees"){
-            currentCurrencyFormat = "₹";
+            currentCurrency = "₹";
         }else{
-            currentCurrencyFormat = "$";
+            currentCurrency = "$";
         }
         showPricingSection();
     })
