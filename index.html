@@ -1,11 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kanban</title>
+    <title>Metacube Parking System</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="./script.js" defer></script>
 </head>
-<body>
+
+<body onload="initialize()">
+    <header>
+        <div id="hero">
+            <img id="header_logo" src="./res/car_logo.png" alt="MetaPark">
+            <h1>Metacube Parking System</h1>
+        </div>
+    </header>
+
+    <main>
+        <!-- Add Employee Section -->
+        <section id="employee_section">
+            <details>
+                <summary class="section_heading">
+                    <h2 id="add-employee" class="section_heading">Add Employee</h2>
+                </summary>
+                <form>
+                    <div class="employee_form_item">
+                        <label for="employee-name" class="label">Name</label> <br>
+                        <input type="text" id="employee-name" class="rounded_textbox" name="employee-name" placeholder="Enter your name" minlength="2" required> <br>
+                    </div>
+                    <div class="employee_form_item">
+                        <div id="employee-gender-container" class="label">
+                            <label id="employee_form_gender_label">Gender</label> <br>
+                            <input type="radio" id="employee-gender-male" class="employee-gender-radio" name="gender" value="male">
+                            <label for="employee-gender-male">Male</label> <br>
+                            <input type="radio" id="employee-gender-female" class="employee-gender-radio" name="gender" value="female">
+                            <label for="employee-gender-female">Female</label> <br>
+                            <input type="radio" id="employee-gender-other" class="employee-gender-radio" name="gender" value="other">
+                            <label for="employee-gender-other">Other</label> <br>
+                        </div>
+                    </div>
+                    <div class="employee_form_item">
+                        <label for="employee-email" id="employee_form_email_label" class="label">Email</label> <br>
+                        <input type="email" id="employee-email" class="rounded_textbox" name="employee-email" placeholder="Enter your email" required> <br>
+                    </div>
+                    <div class="employee_form_item">
+                        <label for="employee-password" class="label">Enter the password</label> <br>
+                        <input type="password" id="employee-password" class="rounded_textbox" name="employee-password" placeholder="Enter your password" minlength="8" required> <br>
+                        <label for="employee-password-confirmation" class="label">Confirm the password</label> <br>
+                        <input type="password" id="employee-password-confirmation" class="rounded_textbox" name="employee-password-confirmation" placeholder="Confirm your password" minlength="8" required> <br>
+                    </div>
+                    <div class="employee_form_item">
+                        <label for="employee-phone-number" class="label">Phone Number</label> <br>
+                        <input type="tel" name="employee-phone-number" id="employee-phone-number" class="rounded_textbox" placeholder="Enter your phone number"> <br>
+                    </div>
+                    <span id="employee_form_message" class="form_message"></span>
+                    <button type="button" id="employee_form_button" class="submit_button" onclick="nextEmployeeSection()">Next</button>
+                </form>
+            </details>
+        </section>
+
+        <!-- Add Vehicle Section -->
+        <section id="vehicle_section">
+            <details>
+                <summary class="section_heading">
+                    <h2 id="add-vehicle" class="section_heading">Add Vehicle</h2>
+                </summary>
+                <form>
+                    <div class="vehicle_form_item">
+                        <label for="vehicle-company" class="label">Vehicle Brand Name</label> <br>
+                        <input type="text" id="vehicle-company" class="rounded_textbox" name="vehicle-company" placeholder="Enter the company name" required> <br>
+                    </div>
+                    <div class="vehicle_form_item">
+                        <label for="vehicle-model" class="label">Vehicle Model</label> <br>
+                        <input type="text" id="vehicle-model" class="rounded_textbox" name="vehicle-model" placeholder="Enter the vehicle model" required> <br>
+                    </div>
+                    <div class="vehicle_form_item">
+                        <label for="vehicle-type" class="label">Select vehicle type</label><br />
+                        <select id="vehicle-type" class="rounded_textbox" required placeholder="none">
+                            <option value="none">None</option>
+                            <option value="two-wheeler">Two Wheeler</option>
+                            <option value="three-wheeler">Three Wheeler</option>
+                            <option value="four-wheeler">Four Wheeler</option>
+                        </select> <br>
+                    </div>
+                    <div class="vehicle_form_item">
+                        <label for="vehicle-number" class="label">Vehicle Number</label> <br>
+                        <input type="text" id="vehicle-number" class="rounded_textbox" name="vehicle-number" placeholder="Enter the vehicle number" required> <br>
+                    </div>
+                    <div class="vehicle_form_item">
+                        <label for="vehicle-employee-id" class="label">Employee Id</label> <br>
+                        <input type="text" id="vehicle-employee-id" class="rounded_textbox" name="vehicle-employee-id" placeholder="Enter the employee id" required> <br>
+                    </div>
+                    <div class="vehicle_form_item">
+                        <label for="vehicle-identification" class="label">Vehicle Identification Description</label> <br>
+                        <textarea name="vehicle-identification" id="vehicle-identification" class="rounded_textbox"></textarea> <br>
+                    </div>
+                    <span id="vehicle_form_message" class="form_message"></span>
+                    <button type="button" id="vehicle_form_button" class="submit_button" onclick="nextVehicleSection()">Next</button>
+                </form>
+            </details>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing_section">
+            <h2 id="pricing" class="section_heading">Pricing</h2>
+
+            <select id="pricing-currency" class="rounded_textbox" required placeholder="none">
+                <option value="none">Select your preffered currency for payment</option>
+                <option value="dollar">(USA) Dollar - $</option>
+                <option value="yen">(Japan) Yen - ¥</option>
+                <option value="rupees">(India) Rupees -  ₹</option>
+            </select>
+
+            <!-- Pricing Plans Container -->
+            <div id="pricing_options">
+                <div class="pricing_option">
+                    <span>Normal Plan</span><br>
+                    <span class="pricing_circle">
+                        $0 / Day
+                    </span>
+                    <button value="day" class="pricing_option_button">Purchase Now</button>
+                </div>
+                <div class="pricing_option">
+                    <span>Saver Plan</span><br>
+                    <span class="pricing_circle">
+                        $0 / Month
+                    </span>
+                    <button value="month" class="pricing_option_button">Purchase Now</button>
+                </div>
+                <div class="pricing_option">
+                    <span>Super Saver Plan</span><br>
+                    <span class="pricing_circle">
+                        $0 / Year
+                    </span>
+                    <button value="year" class="pricing_option_button">Purchase Now</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="ticket_section">
+            <summary class="section_heading">
+                <h2 id="ticket_heading" class="section_heading">Ticket</h2>
+            </summary>
+            <div>
+                <ul>
+                    <li>
+                        <span class="ticket_label">Employee Name</span>
+                        <span class="ticket_value ticket_employee_value"></span>
+                    </li>
+                    <li>
+                        <span class="ticket_label">Employee Gender</span>
+                        <span class="ticket_value ticket_employee_value"></span>
+                    </li>
+                    <li>
+                        <span class="ticket_label">Employee Email</span>
+                        <span class="ticket_value ticket_employee_value"></span>
+                    </li>
+                    <li>
+                        <span class="ticket_label">Employee Number</span>
+                        <span class="ticket_value ticket_employee_value"></span>
+                    </li>
+                    <li>
+                        <span class="ticket_label">Vehicle Company</span>
+                        <span class="ticket_value ticket_vehicle_value"></span>
+                    </li>
+                    <li>
+                        <span class="ticket_label">Vehicle Model</span>
+                        <span class="ticket_value ticket_vehicle_value"></span>
+                    </li>
+                    <li>
+                        <span class="ticket_label">Vehicle Type</span>
+                        <span class="ticket_value ticket_vehicle_value"></span>
+                    </li>
+                    <li>
+                        <span class="ticket_label">Vehicle Number</span>
+                        <span class="ticket_value ticket_vehicle_value"></span>
+                    </li>
+                    <li>
+                        <span class="ticket_label">Employee ID</span>
+                        <span class="ticket_value ticket_vehicle_value"></span>
+                    </li>
+                    <li>
+                        <span class="ticket_label">Vehicle Description</span>
+                        <span class="ticket_value ticket_vehicle_value"></span>
+                    </li>
+                </ul>
+                <div id="pricing_plan_details">
+                    <span>Plan Details</span>
+                    <span id="pricing_plan_details_value"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feedback Section -->
+        <section id="feedback_section">
+            <details>
+                <summary class="section_heading">
+                    <h2 id="give-feedback" class="section_heading">Give Feedback</h2>
+                </summary>
+                <form action="submit">
+                    <br>
+                    <label for="feedback-email" class="label">Email</label> <br>
+                    <input type="email" id="feedback-email" class="rounded_textbox" name="feedback-email" placeholder="Enter your email here" required> <br>
+                    <label for="feedback-subject" class="label">Email Subject</label> <br>
+                    <input type="text" id="feedback-subject" class="rounded_textbox" name="feedback-subject" placeholder="Enter the subject here" required> <br>
+                    <label for="feedback-body" class="label">Email Message</label> <br>
+                    <textarea name="feedback-body" id="feedback-body" class="rounded_textbox"></textarea> <br>
     
+                    <button type="submit" id="send_feedback_button" class="submit_button">Send Feedback</button>
+                </form>
+            </details>
+        </section>
+    </main>
+
+    <footer>
+        <a href="https://github.com/Gamedemons/">Copyright © 2000-2024 Gamedemons</a>
+    </footer>
 </body>
+
 </html>
