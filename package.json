@@ -1,0 +1,22 @@
+{
+  "name": "kanban",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/metacube-manthan-rajoria/GET_003_Chapter_009.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/metacube-manthan-rajoria/GET_003_Chapter_009/issues"
+  },
+  "homepage": "https://github.com/metacube-manthan-rajoria/GET_003_Chapter_009#readme",
+  "description": "",
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}
