@@ -2,6 +2,9 @@ const hasNumber: RegExp = /\d/;
 const checkEmail: RegExp = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim;
 const checkPassword: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,15}$/;
 
+let employeeSection: HTMLElement | null = document.getElementById("employee_section");
+let vehicleSection: HTMLElement | null = document.getElementById("vehicle_section");
+
 let employeeFormErrorId: string = "employee_form_message";
 let vehicleFormErrorId: string = "vehicle_form_message";
 
@@ -103,8 +106,8 @@ function nextEmployeeSection(){
                 "Hi " + employeeDetails.employeeName + ", Can I know your Email."
             );
         }else if(employeeDetails.itemIndex == 2){
-            let textBoxValue = getInputValueById("employee-email");
-            let isEmailValid = checkEmail.test(textBoxValue);
+            let textBoxValue: string = getInputValueById("employee-email");
+            let isEmailValid: boolean = checkEmail.test(textBoxValue);
 
             if(!isEmailValid){
                 setElementMessageById(employeeFormErrorId, "Enter valid email");
@@ -112,68 +115,42 @@ function nextEmployeeSection(){
             };
             employeeDetails.employeeEmail = textBoxValue;
         }else if(employeeDetails.itemIndex == 3){
-            let textBoxValue1 = getInputValueById("employee-password");
-            let textBoxValue2 = getInputValueById("employee-password-confirmation");
+            let textBoxValue1: string = getInputValueById("employee-password");
+            let textBoxValue2: string = getInputValueById("employee-password-confirmation");
             
-            let hasUpperLetter = false;
-            let hasLowerLetter = false;
-            let hasNumber = false;
-            let hasSpecialSymbols = false;
-            for(let i = 0; i<textBoxValue1.length; i++){
-                let currentChar = textBoxValue1.charAt(i).charCodeAt(0);
-                if(currentChar >=65 && currentChar <=90){
-                    hasUpperLetter = true;
-                }else if(currentChar >=97 && currentChar <=122){
-                    hasLowerLetter = true
-                }else if(currentChar >=48 && currentChar <=57){
-                    hasNumber = true;
-                }else if((currentChar >=33 && currentChar <=46) || currentChar == 64){
-                    hasSpecialSymbols = true;
-                }
+            let isPasswordValid = checkPassword.test(textBoxValue1);
+            if(!isPasswordValid || textBoxValue1 !== textBoxValue2){
+                setElementMessageById(
+                    employeeFormErrorId, 
+                    "Enter valid password: Min Length should be 8. Include Upper,Lower Characters, Numbers, Symbols"
+                );
+                return;
             }
 
-            let passwordTest = hasLowerLetter && hasUpperLetter && hasNumber && hasSpecialSymbols;
-
-            if(
-                !textBox1.validity.valid || 
-                !textBox2.validity.valid || 
-                textBoxValue1!==textBoxValue2 ||
-                !passwordTest
-            ){
-                formMessage.style.display = "block";
-                formMessage.innerText = "Enter valid password: Min Length should be 8. Include Upper,Lower Characters, Numbers, Symbols";
-                return;
-            };
             employeeDetails.employeePassword = textBoxValue1;
-
-            let button = document.getElementById("employee_form_button");
-            button.innerText = "Add Employee";
+            setElementMessageById("employee_form_button", "Add Employee");
         }else{
-            let textBox = document.getElementById("employee-phone-number");
-            let textBoxValue = textBox.value;
+            let textBoxValue = getInputValueById("employee-phone-number");
 
             if(textBoxValue.length < 8){
-                formMessage.style.display = "block";
-                formMessage.innerText = "Enter valid number";
+                setElementMessageById(employeeFormErrorId, "Enter valid number");
                 return;
             };
             employeeDetails.employeeNumber = textBoxValue;
 
-            let employeeSection = document.getElementById("employee_section");
-            employeeSection.style.display = "none";
-            let vehicleSection = document.getElementById("vehicle_section");
-            vehicleSection.style.display = "block";
-
+            employeeSection != null ? employeeSection.style.display = "none" : console.log("Cannot find employeeSection.");
+            vehicleSection != null ? vehicleSection.style.display = "block" : console.log("Cannot find vehicleSection.");
             return;
         }
 
         employeeDetails.itemIndex++;
-        hideElementsByClass(elements);
-        elements[employeeDetails.itemIndex].style.display = "block";
-        formMessage.innerText = "";
-        formMessage.style.display = "none";
+        hideElementsByClass("employee_form_item");
+
+        (elements[employeeDetails.itemIndex] as HTMLElement).style.display = "block";
+        (document.getElementById(employeeFormErrorId) as HTMLElement).innerText = "";
+        (document.getElementById(employeeFormErrorId) as HTMLElement).style.display = "none";
     }else{
-        elements[elements.length - 1].style.display = "block";
+        (elements[elements.length - 1] as HTMLElement).style.display = "block";
     }
 }
 
