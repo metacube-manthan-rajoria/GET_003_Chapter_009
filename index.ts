@@ -1,98 +1,47 @@
+// Regular Expressions
 const hasNumber: RegExp = /\d/;
 const checkEmail: RegExp = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim;
 const checkPassword: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,15}$/;
 
+// HTML Elements
 let employeeSection: HTMLElement | null = document.getElementById("employee_section");
 let vehicleSection: HTMLElement | null = document.getElementById("vehicle_section");
 
+// HTML Element Id's
 let employeeFormErrorId: string = "employee_form_message";
 let vehicleFormErrorId: string = "vehicle_form_message";
 
-// Employee and Vehicle Details
-let employeeDetails: any = {
-    itemIndex:0,
-    employeeName: "",
-    employeeGender: "",
-    employeeEmail: "",
-    employeePassword: "",
-    employeeNumber: ""
-};
+// Employee and Vehicle Form Step Index
+let currentEmployeeFormStep: number = 0;
+let currentVehicleFormStep: number = 0;
 
-let vehicleDetails: any = {
-    itemIndex: 0,
-    vehicleCompany: "",
-    vehicleModel: "",
-    vehicleType: "",
-    vehicleNumber: "",
-    employeeId: "",
-    vehicleDescription: ""
-};
-
-// Pricing Variables
-const vehiclePricing: any = {
-    "two-wheeler": [5, 100, 500],
-    "three-wheeler": [10, 200, 1000],
-    "four-wheeler": [20, 500, 3500]
-};
-const pricingStringFormats: string[] = [" / Day", " / Month", " / Year"];
-let currentCurrency: string = "$";
-let currentPlan: string = "day";
-
-// Utility Functions
-function hideElementsByClass(className: string){
-    let elements: HTMLCollectionOf<Element> = document.getElementsByClassName(className);
-    for(const element of elements){
-        (element as HTMLElement).style.display = "none";
-    }
-}
-
-function showElementById(id: string){
-    let element: HTMLElement | null = document.getElementById(id);
-    if(element == null){
-        console.log("Element with id: " + id + " does not exists.")
-        return "-1";
-    }
-    element.style.display = "block";
-}
-
-function setElementMessageById(id: string, message: string){
-    let errorMessageSpan: HTMLElement | null = document.getElementById(id);
-    if(errorMessageSpan == null){
-        console.log("Element with id: " + id + " does not exists.")
-        return "-1";
-    }
-    errorMessageSpan.style.display = "block";
-    errorMessageSpan.innerText = message;
-}
-
-function getInputValueById(id: string): string {
-    let element: HTMLElement | null = <HTMLInputElement>document.getElementById(id);
-    if(element == null){
-        console.log("Element with id: " + id + " does not exists.")
-        return "-1";
-    }
-    return (element as HTMLInputElement).value
-}
+// Variables
+let employee;
+let vehicle;
+let currentEmployeeGender = "other";
 
 // Application Functions
 function nextEmployeeSection(){
     let elements: HTMLCollectionOf<Element> = document.getElementsByClassName("employee_form_item");
 
-    if(employeeDetails.itemIndex < elements.length){
-        if(employeeDetails.itemIndex == 0){
-            let textBoxValue: string | number = getInputValueById("employee-name");
+    if(currentEmployeeFormStep < elements.length){
+        if(currentEmployeeFormStep == 0){
+            let textBoxValue: string = getInputValueById("employee-name");
             
             if(textBoxValue.length < 2 || hasNumber.test(textBoxValue)){
                 setElementMessageById(employeeFormErrorId, "Enter valid name")
                 return;
             }
 
-            employeeDetails.employeeName = textBoxValue;
             setElementMessageById(
                 "employee_form_gender_label", 
-                "Hi " + employeeDetails.employeeName + ", Can I know your gender."
+                "Hi " + textBoxValue + ", Can I know your gender."
             );
-        }else if(employeeDetails.itemIndex == 1){
+            setElementMessageById(
+                "employee_form_email_label", 
+                "Hi " + textBoxValue + ", Can I know your Email."
+            );
+        }else if(currentEmployeeFormStep == 1){
             let radio1 = <HTMLInputElement>document.getElementById("employee-gender-male");
             let radio2 = <HTMLInputElement>document.getElementById("employee-gender-female");
             let radio3 = <HTMLInputElement>document.getElementById("employee-gender-other");
@@ -101,11 +50,7 @@ function nextEmployeeSection(){
                 setElementMessageById(employeeFormErrorId, "Select one of the options");
                 return;
             };
-            setElementMessageById(
-                "employee_form_email_label", 
-                "Hi " + employeeDetails.employeeName + ", Can I know your Email."
-            );
-        }else if(employeeDetails.itemIndex == 2){
+        }else if(currentEmployeeFormStep == 2){
             let textBoxValue: string = getInputValueById("employee-email");
             let isEmailValid: boolean = checkEmail.test(textBoxValue);
 
@@ -113,12 +58,11 @@ function nextEmployeeSection(){
                 setElementMessageById(employeeFormErrorId, "Enter valid email");
                 return;
             };
-            employeeDetails.employeeEmail = textBoxValue;
-        }else if(employeeDetails.itemIndex == 3){
+        }else if(currentEmployeeFormStep == 3){
             let textBoxValue1: string = getInputValueById("employee-password");
             let textBoxValue2: string = getInputValueById("employee-password-confirmation");
             
-            let isPasswordValid = checkPassword.test(textBoxValue1);
+            let isPasswordValid: boolean = checkPassword.test(textBoxValue1);
             if(!isPasswordValid || textBoxValue1 !== textBoxValue2){
                 setElementMessageById(
                     employeeFormErrorId, 
@@ -127,26 +71,30 @@ function nextEmployeeSection(){
                 return;
             }
 
-            employeeDetails.employeePassword = textBoxValue1;
             setElementMessageById("employee_form_button", "Add Employee");
         }else{
-            let textBoxValue = getInputValueById("employee-phone-number");
+            let employeePhoneNumber: string = getInputValueById("employee-phone-number");
 
-            if(textBoxValue.length < 8){
+            if(employeePhoneNumber.length < 8){
                 setElementMessageById(employeeFormErrorId, "Enter valid number");
                 return;
             };
-            employeeDetails.employeeNumber = textBoxValue;
+
+            let employeeName: string = getInputValueById("employee-name");
+            let employeeGender: string = currentEmployeeGender;
+            let employeeEmail: string = getInputValueById("employee-email");
+            let employeePassword: string = getInputValueById("employee-password");
+            employee = new Employee(employeeName, employeeGender, employeeEmail, employeePassword, employeePhoneNumber);
 
             employeeSection != null ? employeeSection.style.display = "none" : console.log("Cannot find employeeSection.");
             vehicleSection != null ? vehicleSection.style.display = "block" : console.log("Cannot find vehicleSection.");
             return;
         }
 
-        employeeDetails.itemIndex++;
+        currentEmployeeFormStep++;
         hideElementsByClass("employee_form_item");
 
-        (elements[employeeDetails.itemIndex] as HTMLElement).style.display = "block";
+        (elements[currentEmployeeFormStep] as HTMLElement).style.display = "block";
         (document.getElementById(employeeFormErrorId) as HTMLElement).innerText = "";
         (document.getElementById(employeeFormErrorId) as HTMLElement).style.display = "none";
     }else{
@@ -377,4 +325,41 @@ function initialize(){
             showTicketSection();
         });
     }
+}
+
+
+// Utility Functions
+function hideElementsByClass(className: string){
+    let elements: HTMLCollectionOf<Element> = document.getElementsByClassName(className);
+    for(const element of elements){
+        (element as HTMLElement).style.display = "none";
+    }
+}
+
+function showElementById(id: string){
+    let element: HTMLElement | null = document.getElementById(id);
+    if(element == null){
+        console.log("Element with id: " + id + " does not exists.")
+        return "-1";
+    }
+    element.style.display = "block";
+}
+
+function setElementMessageById(id: string, message: string){
+    let errorMessageSpan: HTMLElement | null = document.getElementById(id);
+    if(errorMessageSpan == null){
+        console.log("Element with id: " + id + " does not exists.")
+        return "-1";
+    }
+    errorMessageSpan.style.display = "block";
+    errorMessageSpan.innerText = message;
+}
+
+function getInputValueById(id: string): string {
+    let element: HTMLElement | null = <HTMLInputElement>document.getElementById(id);
+    if(element == null){
+        console.log("Element with id: " + id + " does not exists.")
+        return "-1";
+    }
+    return (element as HTMLInputElement).value
 }
