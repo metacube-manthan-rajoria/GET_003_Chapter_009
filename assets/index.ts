@@ -1,6 +1,6 @@
-import Employee from "./build/Employee.js"
-import Vehicle from "./build/Vehicle.js"
-import {getVehiclePricing, getCurrencySymbol, getCurrencyConversionRatio, getPricingPlanFormat} from "./build/Ticket.js"
+import Employee from "./Employee.js"
+import Vehicle from "./Vehicle.js"
+import {getVehiclePricing, getCurrencySymbol, getCurrencyConversionRatio, getPricingPlanFormat} from "./Ticket.js"
 
 // Regular Expressions
 const hasNumber: RegExp = /\d/;
@@ -32,7 +32,7 @@ let currentPlanType: string = "day";
 
 // Application Functions
 function nextEmployeeSection(){
-    let elements: HTMLCollectionOf<Element> = document.getElementsByClassName("employee_form_item");
+    let elements: any = document.getElementsByClassName("employee_form_item");
 
     if(currentEmployeeFormStep < elements.length){
         if(currentEmployeeFormStep == 0){
@@ -113,7 +113,7 @@ function nextEmployeeSection(){
 }
 
 function nextVehicleSection(){
-    let elements: HTMLCollectionOf<Element> = document.getElementsByClassName("vehicle_form_item");
+    let elements: any = document.getElementsByClassName("vehicle_form_item");
 
     if(currentVehicleFormStep < elements.length){
         if(currentVehicleFormStep == 0){
@@ -179,7 +179,7 @@ function nextVehicleSection(){
 }
 
 function showPricingSection(){
-    let pricingOptions: HTMLCollectionOf<Element> = document.getElementsByClassName("pricing_circle");
+    let pricingOptions: any = document.getElementsByClassName("pricing_circle");
 
     if(pricingSection == null) return;
     pricingSection.style.display = "block";
@@ -201,8 +201,8 @@ function showTicketSection(){
     if(ticketSection == null) return;
     ticketSection.style.display = "block";
 
-    let employeeTicketFields: HTMLCollectionOf<Element> = document.getElementsByClassName("ticket_employee_value");
-    let vehicleTicketFields: HTMLCollectionOf<Element> = document.getElementsByClassName("ticket_vehicle_value");
+    let employeeTicketFields: any = document.getElementsByClassName("ticket_employee_value");
+    let vehicleTicketFields: any = document.getElementsByClassName("ticket_vehicle_value");
     let pricingPlanDetailValue: HTMLElement | null = document.getElementById("pricing_plan_details_value");
 
     // Populating all the details fields
@@ -241,7 +241,7 @@ function initialize(){
     (document.getElementsByClassName(vehicleFormItemId)[0] as HTMLElement).style.display = "block";
 
     // Adding eventListner to radiobutton
-    let radioButtons: HTMLCollectionOf<Element> = document.getElementsByClassName("employee-gender-radio");
+    let radioButtons: any = document.getElementsByClassName("employee-gender-radio");
     for(const radio of radioButtons){
         radio.addEventListener("change", (e: Event)=>{
             currentEmployeeGender = (e.target as HTMLInputElement).value;
@@ -275,7 +275,7 @@ function initialize(){
     })
 
     // Adding eventListner to Pricing Option Button
-    let pricingPlanButtons: HTMLCollectionOf<Element> = document.getElementsByClassName("pricing_option_button");
+    let pricingPlanButtons: any = document.getElementsByClassName("pricing_option_button");
     for(const button of pricingPlanButtons){
         button.addEventListener("click", (e: Event)=>{
             currentPlanType = (e.target as HTMLInputElement).value;
@@ -286,7 +286,7 @@ function initialize(){
 
 // Utility Functions
 function hideElementsByClass(className: string){
-    let elements: HTMLCollectionOf<Element> = document.getElementsByClassName(className);
+    let elements: any = document.getElementsByClassName(className);
     for(const element of elements){
         (element as HTMLElement).style.display = "none";
     }
