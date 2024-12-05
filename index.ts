@@ -1,6 +1,6 @@
-import Employee from "./assets/Employee.js"
-import {Vehicle, VehicleType} from "./assets/Vehicle.js"
-import {getVehiclePricing, getCurrencySymbol, getCurrencyConversionRatio, getPricingPlanFormat} from "./assets/Ticket.js"
+import Employee from "./build/Employee.js"
+import Vehicle from "./build/Vehicle.js"
+import {getVehiclePricing, getCurrencySymbol, getCurrencyConversionRatio, getPricingPlanFormat} from "./build/Ticket.js"
 
 // Regular Expressions
 const hasNumber: RegExp = /\d/;
@@ -156,12 +156,7 @@ function nextVehicleSection(){
         }else{
             let vehicleCompany: string = getInputValueById("vehicle-company");
             let vehicleModel: string = getInputValueById("vehicle-model");
-
-            let vehicleType: VehicleType = VehicleType.TWO_WHEELER;
-            let selectedVehicleType: string = getInputValueById("vehicle-type");
-            if(selectedVehicleType === "three-wheeler") vehicleType = VehicleType.THREE_WHEELER;
-            if(selectedVehicleType === "four-wheeler") vehicleType = VehicleType.FOUR_WHEELER;
-            
+            let vehicleType: string = getInputValueById("vehicle-type");
             let vehicleRegistrationNumber: string = getInputValueById("vehicle-number");
             let employeeId: string = getInputValueById("vehicle-employee-id");
             let vehicleDescription: string = getInputValueById("vehicle-identification");
