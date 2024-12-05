@@ -1,16 +1,16 @@
 // Pricing Variables
 const vehiclePricing: any = {
-    "TWO_WHEELER": {
+    "two-wheeler": {
         "day": 5,
         "month": 100,
         "year": 500
     },
-    "THREE_WHEELER": {
+    "three-wheeler": {
         "day": 10,
         "month": 200,
         "year": 1000
     },
-    "FOUR_WHEELER": {
+    "four-wheeler": {
         "day": 20,
         "month": 500,
         "year": 3500
@@ -34,8 +34,7 @@ const pricingPlanFormats: any = {
     "month": " / Month", 
     "year": " / Year"
 };
-// let currentCurrency: string = "$";
-// let currentPlan: string = "day";
+
 function getVehiclePricing(vehicleType: string, planType: string): number{
     return vehiclePricing[vehicleType][planType]??=0;
 }
