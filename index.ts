@@ -1,5 +1,6 @@
 import Employee from "./assets/Employee.js"
 import {Vehicle, VehicleType} from "./assets/Vehicle.js"
+import {getCurrencySymbol} from "./assets/Ticket.js"
 
 // Regular Expressions
 const hasNumber: RegExp = /\d/;
@@ -9,6 +10,8 @@ const checkPassword: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).
 // HTML Elements
 let employeeSection: HTMLElement | null = document.getElementById("employee_section");
 let vehicleSection: HTMLElement | null = document.getElementById("vehicle_section");
+let pricingSection: HTMLElement | null = document.getElementById("pricing_section");
+let ticketSection: HTMLElement | null = document.getElementById("ticket_section");
 
 // HTML Element Id's
 let employeeFormItemId: string = "employee_form_item";
@@ -23,7 +26,9 @@ let currentVehicleFormStep: number = 0;
 // Variables
 let employee: Employee;
 let vehicle: Vehicle;
-let currentEmployeeGender = "other";
+let currentEmployeeGender: string = "other";
+let currentCurrencyFormat: string = "$";
+let currentPlanType: string = "day";
 
 // Application Functions
 function nextEmployeeSection(){
@@ -203,50 +208,41 @@ function showPricingSection(){
 }
 
 function showTicketSection(){
-    let pricingSection = document.getElementById("pricing_section");
+    if(pricingSection == null) return;
     pricingSection.style.display = "none";
 
-    let ticketSection = document.getElementById("ticket_section");
+    if(ticketSection == null) return;
     ticketSection.style.display = "block";
 
-    let employeeTicketFields = document.getElementsByClassName("ticket_employee_value");
-    let vehicleTicketFields = document.getElementsByClassName("ticket_vehicle_value");
-    let pricingPlanDetailValue = document.getElementById("pricing_plan_details_value");
+    let employeeTicketFields: HTMLCollectionOf<Element> = document.getElementsByClassName("ticket_employee_value");
+    let vehicleTicketFields: HTMLCollectionOf<Element> = document.getElementsByClassName("ticket_vehicle_value");
+    let pricingPlanDetailValue: HTMLElement | null = document.getElementById("pricing_plan_details_value");
 
     // Populating all the details fields
-    employeeTicketFields[0].innerText = employeeDetails.employeeName;
-    employeeTicketFields[1].innerText = employeeDetails.employeeGender;
-    employeeTicketFields[2].innerText = employeeDetails.employeeEmail;
-    employeeTicketFields[3].innerText = employeeDetails.employeeNumber;
+    (employeeTicketFields[0] as HTMLElement).innerText = employee.getName();
+    (employeeTicketFields[1] as HTMLElement).innerText = employee.getGender();
+    (employeeTicketFields[2] as HTMLElement).innerText = employee.getEmail();
+    (employeeTicketFields[3] as HTMLElement).innerText = employee.getNumber();
 
-    vehicleTicketFields[0].innerText = vehicleDetails.vehicleCompany;
-    vehicleTicketFields[1].innerText = vehicleDetails.vehicleModel;
-    vehicleTicketFields[2].innerText = vehicleDetails.vehicleType;
-    vehicleTicketFields[3].innerText = vehicleDetails.vehicleNumber;
-    vehicleTicketFields[4].innerText = vehicleDetails.employeeId;
-    vehicleTicketFields[5].innerText = vehicleDetails.vehicleDescription;
+    (vehicleTicketFields[0] as HTMLElement).innerText = vehicle.getCompany();
+    (vehicleTicketFields[1] as HTMLElement).innerText = vehicle.getModel();
+    (vehicleTicketFields[2] as HTMLElement).innerText = vehicle.getType().toString();
+    (vehicleTicketFields[3] as HTMLElement).innerText = vehicle.getRegistrationNumber();
+    (vehicleTicketFields[4] as HTMLElement).innerText = vehicle.getEmployeeId();
+    (vehicleTicketFields[5] as HTMLElement).innerText = vehicle.getDescription();
 
-    // Displaying the final plan
-    let priceIndex = 0;
-    if(currentPlan === "month"){
-        priceIndex = 1;
-    }else if(currentPlan === "year"){
-        priceIndex = 2;
-    }else{
-        priceIndex = 0;
-    }
-
-    let currencyConvertionRatio = 1;
-    if(currentCurrency === "$"){
+    let currencyConvertionRatio: number = 1;
+    if(currentCurrencyFormat === "$"){
         currencyConvertionRatio = 85;
-    }else if(currentCurrency === "¥"){
+    }else if(currentCurrencyFormat === "¥"){
         currencyConvertionRatio = 1/1.77;
     }else{
         currencyConvertionRatio = 1;
     }
 
+    if(pricingPlanDetailValue == null) return;
     pricingPlanDetailValue.innerText = 
-        currentCurrency + 
+        currentCurrencyFormat + 
         (vehiclePricing[vehicleDetails.vehicleType][priceIndex] / currencyConvertionRatio).toFixed(2) + 
         " per " + currentPlan;
 }
@@ -276,9 +272,7 @@ function initialize(){
 
     const passwordFieldBorderCases: Function = (e: Event)=>{
         let element = <HTMLInputElement>e.target;
-        if(element == null){
-            return;
-        }
+        if(element == null) return;
         if(element.value.length < 8){
             element.style.border = "2px solid red";
         }else if(element.value.length < 10){
@@ -293,25 +287,20 @@ function initialize(){
     document.getElementById("employee-password-confirmation")?.addEventListener("blur", passwordFieldBorderCases());
 
     // Adding eventListner to Pricing Currency Selector Menu
-    let pricingCurrency = document.getElementById("pricing-currency");
-    pricingCurrency.addEventListener("change", (e)=>{
-        let currency = e.target.value;
+    let pricingCurrencyElement: HTMLElement | null = document.getElementById("pricing-currency");
+    if(pricingCurrencyElement == null) return;
 
-        if(currency === "yen"){
-            currentCurrency = "¥";
-        }else if(currency === "rupees"){
-            currentCurrency = "₹";
-        }else{
-            currentCurrency = "$";
-        }
+    pricingCurrencyElement.addEventListener("change", (e: Event)=>{
+        let currencyFormat: string = (e.target as HTMLInputElement).value;
+        currentCurrencyFormat = getCurrencySymbol(currencyFormat);
         showPricingSection();
     })
 
     // Adding eventListner to Pricing Option Button
-    let pricingPlanButtons = document.getElementsByClassName("pricing_option_button");
+    let pricingPlanButtons: HTMLCollectionOf<Element> = document.getElementsByClassName("pricing_option_button");
     for(const button of pricingPlanButtons){
-        button.addEventListener("click", (e)=>{
-            currentPlan = e.target.value;
+        button.addEventListener("click", (e: Event)=>{
+            currentPlanType = (e.target as HTMLInputElement).value;
             showTicketSection();
         });
     }
