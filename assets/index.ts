@@ -180,6 +180,10 @@ function nextVehicleSection(){
 
 function showPricingSection(){
     let pricingOptions: any = document.getElementsByClassName("pricing_circle");
+    if(pricingOptions == null){
+        alert("Something went wrong, raise a ticket!");
+        return;
+    }
 
     if(pricingSection == null) return;
     pricingSection.style.display = "block";
@@ -203,6 +207,10 @@ function showTicketSection(){
 
     let employeeTicketFields: any = document.getElementsByClassName("ticket_employee_value");
     let vehicleTicketFields: any = document.getElementsByClassName("ticket_vehicle_value");
+    if((employeeTicketFields && vehicleTicketFields) == null){
+        alert("Something went wrong, raise a ticket!");
+        return;
+    }
     let pricingPlanDetailValue: HTMLElement | null = document.getElementById("pricing_plan_details_value");
 
     // Populating all the details fields
@@ -242,6 +250,10 @@ function initialize(){
 
     // Adding eventListner to radiobutton
     let radioButtons: any = document.getElementsByClassName("employee-gender-radio");
+    if(radioButtons == null){
+        alert("Something went wrong, raise a ticket!");
+        return;
+    }
     for(const radio of radioButtons){
         radio.addEventListener("change", (e: Event)=>{
             currentEmployeeGender = (e.target as HTMLInputElement).value;
@@ -276,6 +288,10 @@ function initialize(){
 
     // Adding eventListner to Pricing Option Button
     let pricingPlanButtons: any = document.getElementsByClassName("pricing_option_button");
+    if(pricingPlanButtons == null){
+        alert("Something went wrong, raise a ticket!");
+        return;
+    }
     for(const button of pricingPlanButtons){
         button.addEventListener("click", (e: Event)=>{
             currentPlanType = (e.target as HTMLInputElement).value;
@@ -287,6 +303,11 @@ function initialize(){
 // Utility Functions
 function hideElementsByClass(className: string){
     let elements: any = document.getElementsByClassName(className);
+    if(elements == null){
+        alert("Something went wrong, raise a ticket!");
+        console.log("Cannot find class : " + className);
+        return;
+    }
     for(const element of elements){
         (element as HTMLElement).style.display = "none";
     }
@@ -295,6 +316,7 @@ function hideElementsByClass(className: string){
 function showElementById(id: string){
     let element: HTMLElement | null = document.getElementById(id);
     if(element == null){
+        alert("Something went wrong, raise a ticket!");
         console.log("Element with id: " + id + " does not exists.")
         return;
     }
@@ -304,6 +326,7 @@ function showElementById(id: string){
 function hideElementById(id: string){
     let element: HTMLElement | null = document.getElementById(id);
     if(element == null){
+        alert("Something went wrong, raise a ticket!");
         console.log("Element with id: " + id + " does not exists.")
         return;
     }
@@ -313,6 +336,7 @@ function hideElementById(id: string){
 function setElementMessageById(id: string, message: string){
     let errorMessageSpan: HTMLElement | null = document.getElementById(id);
     if(errorMessageSpan == null){
+        alert("Something went wrong, raise a ticket!");
         console.log("Element with id: " + id + " does not exists.")
         return;
     }
@@ -323,6 +347,7 @@ function setElementMessageById(id: string, message: string){
 function getInputValueById(id: string): string {
     let element: HTMLElement | null = <HTMLInputElement>document.getElementById(id);
     if(element == null){
+        alert("Something went wrong, raise a ticket!");
         console.log("Element with id: " + id + " does not exists.")
         return "-1";
     }
