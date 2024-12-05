@@ -1,7 +1,7 @@
 class Vehicle {
     private company: string = "";
     private model: string = "";
-    private type: VehicleType;
+    private type: string = "";
     private registrationNumber: string = "";
     private employeeId: string = "";
     private description: string = "";
@@ -11,19 +11,19 @@ class Vehicle {
     public constructor(
         company: string,
         model: string,
-        type: VehicleType,
+        type: string,
         registrationNumber: string,
         employeeId: string,
         description: string
     ){
         this.company = company??="";
         this.model = model??="";
-        this.type = type;
+        this.type = type??="";
         this.registrationNumber = registrationNumber??="";
         this.employeeId = employeeId??="";
         this.description = description??="";
 
-        if((company && model && registrationNumber && employeeId) == null){
+        if((company && model && type && registrationNumber && employeeId) == null){
             this.isValidObject = false;
         }
     }
@@ -51,10 +51,4 @@ class Vehicle {
     }
 }
 
-enum VehicleType {
-    TWO_WHEELER = 1,
-    THREE_WHEELER,
-    FOUR_WHEELER
-}
-
-export {Vehicle, VehicleType};
+export default Vehicle;
