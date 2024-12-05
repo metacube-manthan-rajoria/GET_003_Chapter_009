@@ -34,8 +34,8 @@ class Vehicle {
     public getModel(): string {
         return this.model;
     }
-    public getType(): VehicleType {
-        return this.type;
+    public getType(): string {
+        return this.type.toString();
     }
     public getRegistrationNumber(): string {
         return this.registrationNumber;
