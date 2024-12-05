@@ -1,6 +1,6 @@
 import Employee from "./assets/Employee.js"
 import {Vehicle, VehicleType} from "./assets/Vehicle.js"
-import {getCurrencySymbol} from "./assets/Ticket.js"
+import {getVehiclePricing, getCurrencySymbol, getCurrencyConversionRatio, getPricingPlanFormat} from "./assets/Ticket.js"
 
 // Regular Expressions
 const hasNumber: RegExp = /\d/;
@@ -184,26 +184,18 @@ function nextVehicleSection(){
 }
 
 function showPricingSection(){
-    let pricingSection = document.getElementById("pricing_section");
-    let pricingOptions = document.getElementsByClassName("pricing_circle");
+    let pricingOptions: HTMLCollectionOf<Element> = document.getElementsByClassName("pricing_circle");
+
+    if(pricingSection == null) return;
     pricingSection.style.display = "block";
 
-    let currencyConvertionRatio = 1;
-    if(currentCurrency === "$"){
-        currencyConvertionRatio = 85;
-    }else if(currentCurrency === "¥"){
-        currencyConvertionRatio = 1/1.77;
-    }else{
-        currencyConvertionRatio = 1;
-    }
+    let currencyConvertionRatio = getCurrencyConversionRatio(getInputValueById("pricing-currency"));
 
-    let i = 0;
     for(const option of pricingOptions){
-        option.innerText = 
-            currentCurrency + 
-            (vehiclePricing[vehicleDetails.vehicleType][i] / currencyConvertionRatio).toFixed(2) + 
-            pricingStringFormats[i];
-        i++;
+        (option as HTMLElement).innerText = 
+            currentCurrencyFormat + 
+            (getVehiclePricing(vehicle.getType(), currentPlanType) / currencyConvertionRatio).toFixed(2) + 
+            getPricingPlanFormat(currentPlanType);
     }
 }
 
@@ -231,25 +223,16 @@ function showTicketSection(){
     (vehicleTicketFields[4] as HTMLElement).innerText = vehicle.getEmployeeId();
     (vehicleTicketFields[5] as HTMLElement).innerText = vehicle.getDescription();
 
-    let currencyConvertionRatio: number = 1;
-    if(currentCurrencyFormat === "$"){
-        currencyConvertionRatio = 85;
-    }else if(currentCurrencyFormat === "¥"){
-        currencyConvertionRatio = 1/1.77;
-    }else{
-        currencyConvertionRatio = 1;
-    }
+    let currencyConvertionRatio = getCurrencyConversionRatio(getInputValueById("pricing-currency"));
 
     if(pricingPlanDetailValue == null) return;
     pricingPlanDetailValue.innerText = 
         currentCurrencyFormat + 
-        (vehiclePricing[vehicleDetails.vehicleType][priceIndex] / currencyConvertionRatio).toFixed(2) + 
-        " per " + currentPlan;
+        (getVehiclePricing(vehicle.getType(), currentPlanType) / currencyConvertionRatio).toFixed(2) + 
+        " per " + currentPlanType;
 }
 
-/**
- * Setting up eventListners and initial State
- */
+// Setting up eventListners and initial State
 function initialize(){
     // Hiding Sections Initially
     hideElementById("vehicle_section");
@@ -305,7 +288,6 @@ function initialize(){
         });
     }
 }
-
 
 // Utility Functions
 function hideElementsByClass(className: string){
