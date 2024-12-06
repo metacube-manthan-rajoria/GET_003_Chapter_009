@@ -218,6 +218,10 @@ function showTicketSection(){
         alert("Something went wrong, raise a ticket!");
         return;
     }
+    if(!employee.isValid() || !vehicle.isValid()){
+        alert("We ran into an error, raise a ticket");
+        return;
+    }
     let pricingPlanDetailValue: HTMLElement | null = document.getElementById("pricing_plan_details_value");
 
     // Populating all the details fields
