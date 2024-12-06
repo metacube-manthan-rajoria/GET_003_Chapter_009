@@ -263,18 +263,23 @@ function initialize(){
     const passwordFieldBorderCases: Function = (e: Event)=>{
         let element = <HTMLInputElement>e.target;
         if(element == null) return;
-        if(element.value.length < 8){
+        let passwordLength = element.value.length;
+        if(passwordLength < 8){
             element.style.border = "2px solid red";
-        }else if(element.value.length < 10){
+        }else if(passwordLength < 10){
             element.style.border = "2px solid orange";
-        }else if(element.value.length < 12){
+        }else if(passwordLength < 12){
             element.style.border = "2px solid yellow";
         }else{
             element.style.border = "2px solid green";
         }
     }
-    document.getElementById("employee-password")?.addEventListener("blur", passwordFieldBorderCases());
-    document.getElementById("employee-password-confirmation")?.addEventListener("blur", passwordFieldBorderCases());
+    document.getElementById("employee-password")?.addEventListener("blur", (e: Event)=>{
+        passwordFieldBorderCases(e);
+    });
+    document.getElementById("employee-password-confirmation")?.addEventListener("blur", (e: Event)=>{
+        passwordFieldBorderCases(e);
+    });
 
     // Adding eventListner to Pricing Currency Selector Menu
     let pricingCurrencyElement: HTMLElement | null = document.getElementById("pricing-currency");
@@ -353,3 +358,13 @@ function getInputValueById(id: string): string {
     }
     return (element as HTMLInputElement).value
 }
+
+window.onload = ()=>{
+    initialize();
+}
+document.getElementById("employee_form_button")?.addEventListener("click", ()=>{
+    nextEmployeeSection();
+})
+document.getElementById("vehicle_form_button")?.addEventListener("click", ()=>{
+    nextVehicleSection();
+})
