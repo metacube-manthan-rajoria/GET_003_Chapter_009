@@ -190,11 +190,18 @@ function showPricingSection(){
 
     let currencyConvertionRatio = getCurrencyConversionRatio(getInputValueById("pricing-currency"));
 
+    let planIndex: number = 0;
     for(const option of pricingOptions){
+        let elementPlanType = "day";
+        if(planIndex == 1) elementPlanType = "month";
+        if(planIndex == 2) elementPlanType = "year";
+        
         (option as HTMLElement).innerText = 
             currentCurrencyFormat + 
-            (getVehiclePricing(vehicle.getType(), currentPlanType) / currencyConvertionRatio).toFixed(2) + 
+            (getVehiclePricing(vehicle.getType(), elementPlanType) / currencyConvertionRatio).toFixed(2) + 
             getPricingPlanFormat(currentPlanType);
+
+        planIndex++;
     }
 }
 
@@ -316,16 +323,6 @@ function hideElementsByClass(className: string){
     for(const element of elements){
         (element as HTMLElement).style.display = "none";
     }
-}
-
-function showElementById(id: string){
-    let element: HTMLElement | null = document.getElementById(id);
-    if(element == null){
-        alert("Something went wrong, raise a ticket!");
-        console.log("Element with id: " + id + " does not exists.")
-        return;
-    }
-    element.style.display = "block";
 }
 
 function hideElementById(id: string){
