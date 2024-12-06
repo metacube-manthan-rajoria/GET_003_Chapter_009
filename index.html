@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Metacube Parking System</title>
     <link rel="stylesheet" href="style.css">
-    <script src="./build/index.js" defer></script>
+    <script type="module" src="./build/index.js" defer></script>
 </head>
 
-<body onload="initialize()">
+<body>
     <header>
         <div id="hero">
             <img id="header_logo" src="./res/car_logo.png" alt="MetaPark">
@@ -41,7 +41,7 @@
                         </div>
                     </div>
                     <div class="employee_form_item">
-                        <label for="employee-email" id="employee_form_email_label" class="label">Email</label> <br>
+                        <label for="employee-email" id="employee_form_email_label" class="label">Email</label>
                         <input type="email" id="employee-email" class="rounded_textbox" name="employee-email" placeholder="Enter your email" required> <br>
                     </div>
                     <div class="employee_form_item">
@@ -55,7 +55,7 @@
                         <input type="tel" name="employee-phone-number" id="employee-phone-number" class="rounded_textbox" placeholder="Enter your phone number"> <br>
                     </div>
                     <span id="employee_form_message" class="form_message"></span>
-                    <button type="button" id="employee_form_button" class="submit_button" onclick="nextEmployeeSection()">Next</button>
+                    <button type="button" id="employee_form_button" class="submit_button">Next</button>
                 </form>
             </details>
         </section>
@@ -97,7 +97,7 @@
                         <textarea name="vehicle-identification" id="vehicle-identification" class="rounded_textbox"></textarea> <br>
                     </div>
                     <span id="vehicle_form_message" class="form_message"></span>
-                    <button type="button" id="vehicle_form_button" class="submit_button" onclick="nextVehicleSection()">Next</button>
+                    <button type="button" id="vehicle_form_button" class="submit_button">Next</button>
                 </form>
             </details>
         </section>
