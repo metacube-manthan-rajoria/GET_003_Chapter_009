@@ -26,7 +26,8 @@ const currencySymbol: any = {
 const currencyConversionRatio: any = {
     "rupees": 1,
     "yen": 1/1.77,
-    "dollar": 85
+    "dollar": 85,
+    "none": 85
 };
 
 const pricingPlanFormats: any = {
