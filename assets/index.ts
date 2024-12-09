@@ -322,7 +322,7 @@ function hideElementsByClass(className: string){
     let elements: any = document.getElementsByClassName(className);
     if(elements == null){
         alert("Something went wrong, raise a ticket!");
-        console.log("Cannot find class : " + className);
+        console.error("Cannot find class : " + className);
         return;
     }
     for(const element of elements){
@@ -334,7 +334,7 @@ function hideElementById(id: string){
     let element: HTMLElement | null = document.getElementById(id);
     if(element == null){
         alert("Something went wrong, raise a ticket!");
-        console.log("Element with id: " + id + " does not exists.")
+        console.error("Element with id: " + id + " does not exists.")
         return;
     }
     element.style.display = "none";
@@ -344,7 +344,7 @@ function setElementMessageById(id: string, message: string){
     let errorMessageSpan: HTMLElement | null = document.getElementById(id);
     if(errorMessageSpan == null){
         alert("Something went wrong, raise a ticket!");
-        console.log("Element with id: " + id + " does not exists.")
+        console.error("Element with id: " + id + " does not exists.")
         return;
     }
     errorMessageSpan.style.display = "block";
@@ -355,7 +355,7 @@ function getInputValueById(id: string): string {
     let element: HTMLElement | null = <HTMLInputElement>document.getElementById(id);
     if(element == null){
         alert("Something went wrong, raise a ticket!");
-        console.log("Element with id: " + id + " does not exists.")
+        console.error("Element with id: " + id + " does not exists.")
         return "-1";
     }
     return (element as HTMLInputElement).value
