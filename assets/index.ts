@@ -4,6 +4,7 @@ import {getVehiclePricing, getCurrencySymbol, getCurrencyConversionRatio, getPri
 
 // Regular Expressions
 const hasNumber: RegExp = /\d/;
+const isPhoneNumber: RegExp = /^\+?\d{1,4}?[-.\s]?\(?\d{1,4}?\)?[-.\s]?\d{1,9}[-.\s]?\d{1,9}[-.\s]?\d{1,9}$/;
 const checkEmail: RegExp = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim;
 const checkPassword: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,15}$/;
 
@@ -85,7 +86,7 @@ function nextEmployeeSection(){
         }else{
             let employeePhoneNumber: string = getInputValueById("employee-phone-number");
 
-            if(employeePhoneNumber.length < 8){
+            if(employeePhoneNumber.length < 8 || isPhoneNumber.test(employeePhoneNumber) == false){
                 setElementMessageById(employeeFormErrorId, "Enter valid number");
                 return;
             };
