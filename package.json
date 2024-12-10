@@ -1,19 +1,22 @@
 {
   "name": "metaparking",
   "private": true,
-  "version": "2.0.0",
+  "version": "2.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy" : "npm run build",
+    "deploy" : "gh-pages -d dist"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/metacube-manthan-rajoria/GET_003_Chapter_009.git"
   },
-  "homepage": "https://github.com/metacube-manthan-rajoria/GET_003_Chapter_009#readme",
+  "homepage": "https://metacube-manthan-rajoria.github.io/GET_003_Chapter_009/",
   "devDependencies": {
+    "gh-pages": "^6.2.0",
     "typescript": "~5.6.2",
     "vite": "^6.0.1"
   }
