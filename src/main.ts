@@ -1,6 +1,8 @@
-import Employee from "./Employee.js"
-import Vehicle from "./Vehicle.js"
-import {getVehiclePricing, getCurrencySymbol, getCurrencyConversionRatio, getPricingPlanFormat} from "./Ticket.js"
+import './style.css'
+
+import Employee from "./ts/Employee.js"
+import Vehicle from "./ts/Vehicle.js"
+import {getVehiclePricing, getCurrencySymbol, getCurrencyConversionRatio, getPricingPlanFormat} from "./ts/Ticket.js"
 
 // Regular Expressions
 const hasNumber: RegExp = /\d/;

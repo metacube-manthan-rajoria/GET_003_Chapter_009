@@ -1,27 +1,20 @@
 {
   "name": "metaparking",
-  "version": "1.0.0",
-  "main": "index.html",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
   "scripts": {
-    "start": "npx tsc",
-    "build": "npx tsc",
-    "predeploy": "npx parcel build index.html",
-    "deploy": "gh-pages -d dist"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/metacube-manthan-rajoria/GET_003_Chapter_009.git"
   },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/metacube-manthan-rajoria/GET_003_Chapter_009/issues"
-  },
   "homepage": "https://github.com/metacube-manthan-rajoria/GET_003_Chapter_009#readme",
-  "description": "",
   "devDependencies": {
-    "gh-pages": "^6.2.0",
-    "parcel-bundler": "^1.12.5",
-    "typescript": "^5.7.2"
+    "typescript": "~5.6.2",
+    "vite": "^6.0.1"
   }
 }
